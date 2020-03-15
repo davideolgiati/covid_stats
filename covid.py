@@ -6,32 +6,36 @@ import datetime
 from datetime import date
 import sys
 
-def compute_perc(new, old):
+def compute_perc(new, old, Perc):
     diff = new - old
-    Negative = False
+    if Perc:
+        Negative = False
 
-    if diff < 0:
-        diff *= -1
-        Negative = True
-    if old > 0:
-        perc = diff * 100 / old
+        if diff < 0:
+            diff *= -1
+            Negative = True
+
+        if old > 0:
+            perc = diff * 100 / old
+        else:
+            perc = 100
+
+        tab = "\t\t"
+        if perc > 999:
+            tab = "\t"
+
+        str_perc = str(round(perc, 1))
+
+        if Negative:
+            str_perc = '-' + str_perc + '%' + tab
+        else:
+            str_perc = '+' + str_perc + '%' + tab
     else:
-        perc = 100
-
-    tab = "\t\t"
-    if perc > 999:
-        tab = "\t"
-
-    str_perc = str(round(perc, 1))
-
-    if Negative:
-        str_perc = '-' + str_perc + '%' + tab
-    else:
-        str_perc = '+' + str_perc + '%' + tab
+        str_perc = str(diff) + "\t\t"
 
     return str_perc
 
-def print_info(desc, json, entry, regione, stats):
+def print_info(desc, json, entry, regione, stats, Perc):
     regioni = [
         4356406, 125666, 10060574, 118714,
         4905854, 1215220, 1550640, 4459477,
@@ -45,9 +49,9 @@ def print_info(desc, json, entry, regione, stats):
     day3 = stats[regione]['day3'][entry]
     day4 = stats[regione]['day4'][entry]
 
-    yperc = compute_perc(today, yesterday)
-    perc3 = compute_perc(today, day3)
-    perc4 = compute_perc(today, day4)
+    yperc = compute_perc(today, yesterday, Perc)
+    perc3 = compute_perc(today, day3, Perc)
+    perc4 = compute_perc(today, day4, Perc)
 
     print('\t ' + desc +
           str(json[entry]) +
@@ -57,7 +61,7 @@ def print_info(desc, json, entry, regione, stats):
           + perc3
           + perc4)
 
-def main(Input = ""):
+def main(Input = "", Perc=True):
     print("Davide Olgiati - 15/03/2020\n")
     print("covid.py - statistiche giornaliere sulla diffusione del")
     print("           virus COVID-19 nelle regioni italiane\n")
@@ -90,47 +94,47 @@ def main(Input = ""):
                            entry,
                            'totale_ospedalizzati',
                            entry['codice_regione'],
-                           stats)
+                           stats, Perc)
                 print_info("Ricoverati con sintomi : ",
                            entry,
                            'ricoverati_con_sintomi',
                            entry['codice_regione'],
-                           stats)
+                           stats, Perc)
                 print_info("Terapia intensiava     : ",
                            entry,
                            'terapia_intensiva',
                            entry['codice_regione'],
-                           stats)
+                           stats, Perc)
                 print_info("Isolamento Domiciliare : ",
                            entry,
                            'isolamento_domiciliare',
                            entry['codice_regione'],
-                           stats)
+                           stats, Perc)
                 print_info("Totale Positivi        : ",
                            entry,
                            'totale_attualmente_positivi',
                            entry['codice_regione'],
-                           stats)
+                           stats, Perc)
                 print_info("Nuovi Positivi         : ",
                            entry,
                            'nuovi_attualmente_positivi',
                            entry['codice_regione'],
-                           stats)
+                           stats, Perc)
                 print_info("Dimessi                : ",
                            entry,
                            'dimessi_guariti',
                            entry['codice_regione'],
-                           stats)
+                           stats, Perc)
                 print_info("Deceduti               : ",
                            entry,
                            'deceduti',
                            entry['codice_regione'],
-                           stats)
+                           stats, Perc)
                 print_info("Totale Casi            : ",
                            entry,
                            'totale_casi',
                            entry['codice_regione'],
-                           stats)
+                           stats, Perc)
                 print("\n")
         elif d2 in entry['data']:
             stats[entry['codice_regione']]['yesterday'] = entry
@@ -143,8 +147,19 @@ def main(Input = ""):
 
     conn.close()
 
+def parse_argv(input):
+    val = ["", True]
+    for arg in input:
+        if arg == "-f":
+            val[1] = False
+        else:
+            val[0] = arg
+
+    return val
+
 if __name__ == "__main__":
-    if len(sys.argv) == 2:
-        main(sys.argv[1])
+    if len(sys.argv) > 1:
+        val = parse_argv(sys.argv)
+        main(val[0], val[1])
     else:
         main("")
