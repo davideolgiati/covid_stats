@@ -3,6 +3,6 @@ Semplice tool scritto in python per calcolare le statstiche del contagio da COVI
 
 Eseguirlo in locale:
 
-python3 covid.py
-*oppure*
-python3 covid.py <regione>
+python3 covid.py  
+*oppure*  
+python3 covid.py \<regione\>
