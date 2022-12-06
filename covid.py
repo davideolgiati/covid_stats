@@ -1,7 +1,6 @@
 # Davide Olgiati 14/03/2020
 import http.client
 import json
-from io import StringIO
 import datetime
 from datetime import date
 import sys
@@ -61,12 +60,13 @@ def print_info(desc, json, entry, regione, stats, Perc):
           + perc3
           + perc4)
 
+
+def banner():
+    with open("resources/banner.txt", "r") as fp:
+        print("\n".join(fp.readlines()))
+
+
 def main(Input = "", Perc=True):
-    print("Davide Olgiati - 15/03/2020\n")
-    print("covid.py - statistiche giornaliere sulla diffusione del")
-    print("           virus COVID-19 nelle regioni italiane\n")
-    print("DATI UFFICIALI PRESI DAL REPOSITORY GITHUB DELLA PROTEZIONE")
-    print("CIVILE E DEL MINISTERO DELL'ISTRUZIONE\n\n")
     baseURL = "raw.githubusercontent.com"
     page = "/pcm-dpc/COVID-19/master/dati-json/dpc-covid19-ita-regioni.json"
     conn = http.client.HTTPSConnection(baseURL)
@@ -158,6 +158,7 @@ def parse_argv(input):
     return val
 
 if __name__ == "__main__":
+    banner()
     if len(sys.argv) > 1:
         val = parse_argv(sys.argv)
         main(val[0], val[1])

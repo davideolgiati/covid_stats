@@ -1,0 +1,7 @@
+Davide Olgiati - 15/03/2020
+
+covid.py - statistiche giornaliere sulla diffusione del
+           virus COVID-19 nelle regioni italiane
+
+DATI UFFICIALI PRESI DAL REPOSITORY GITHUB DELLA PROTEZIONE
+CIVILE E DEL MINISTERO DELL'ISTRUZIONE ITALIANO
