@@ -1,0 +1,6 @@
+{
+  "github" : {
+    "base_url": "https://raw.githubusercontent.com/",
+    "data_path": "pcm-dpc/COVID-19/master/dati-json/dpc-covid19-ita-regioni.json"
+  }
+}

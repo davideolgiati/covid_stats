@@ -1,7 +1,7 @@
 import requests
 from urllib.parse import urljoin
 from requests.adapters import Retry
-from TimeoutHTTPAdapter import TimeoutHTTPAdapter
+from .TimeoutHTTPAdapter import TimeoutHTTPAdapter
 
 
 class ResilientHttpConnector:
@@ -36,10 +36,10 @@ class ResilientHttpConnector:
         self.connector = connector
 
     def get(self, path):
-        self.connector.get(self.__full_url(path))
+        return self.connector.get(self.__full_url(path)).json()
 
     def post(self, path, body):
-        self.connector.post(self.__full_url(path), json=body)
+        return self.connector.post(self.__full_url(path), json=body).json()
 
     def __full_url(self, path):
         return urljoin(self.base_url, path)
